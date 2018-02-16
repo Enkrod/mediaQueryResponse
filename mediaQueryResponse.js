@@ -1,8 +1,8 @@
 /*!
  * mediaQueryResponse (MQR) v1.0.0
  *
- * A service that lets scripts register and subscribe to mediaQueries,
- * monitors changes and subsequently publishes to subscribers.
+ * A module that lets scripts register and subscribe to mediaQueries,
+ * monitors and subsequently publishes to changes subscribers.
  *
  *
  * == Subscribe/Publish Architecture
