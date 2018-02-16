@@ -84,7 +84,9 @@ var mediaQueryResponse = (function () {
             return false;
         }
         if (!_config.enabled) {
-            if (_config.debug) console.warn("mediaQueryResponse: Disabled!");
+            if (_config.debug) {
+                console.warn("mediaQueryResponse: Disabled!");
+            }
 
             return false;
         }
@@ -99,7 +101,9 @@ var mediaQueryResponse = (function () {
             if (subscribers.hasOwnProperty(token)) {
                 response = subscribers[token];
                 param = {matches: event.matches, query: event.media, label: label, token: token, trigger: trigger};
-                if (_config.debug) console.log("mediaQueryResponse: debugging", response, param);
+                if (_config.debug) {
+                    console.log("mediaQueryResponse: debugging", response, param);
+                }
                 _runResponse(response, param);
             }
         }
@@ -125,10 +129,10 @@ var mediaQueryResponse = (function () {
     // Debugging-mode can be changed from the outside.
     function debug(dbg) {
         if (_isDefined(dbg)) {
-            if (typeof(dbg) == typeof(true)) {
+            if (typeof(dbg) === typeof(true)) {
                 _config.debug = dbg;
                 console.log("mediaQueryResponse: Debugging set to: \"" + dbg + "\".");
-                return _config.debug
+                return _config.debug;
             } else {
                 console.warn("mediaQueryResponse: Debugging-state cannot be set, needs to be boolean or undefined:", dbg);
                 return false;
@@ -136,7 +140,7 @@ var mediaQueryResponse = (function () {
         } else {
             _config.debug = !_config.debug;
             console.log("mediaQueryResponse: Debugging toggled: \"" + _config.debug + "\".");
-            return _config.debug
+            return _config.debug;
         }
     }
 
@@ -148,7 +152,9 @@ var mediaQueryResponse = (function () {
     // Registers a mediaQuery and sets up publishing service for later subscribers
     function registerQuery(label, short) {
 
-        if (!_isEnabled()) return false;
+        if (!_isEnabled()) {
+            return false;
+        }
 
         var query = _getQueryString(short);
 
@@ -178,7 +184,9 @@ var mediaQueryResponse = (function () {
 
     // Change an existing query to a new queryString
     function changeQuery(label, short) {
-        if (!_isEnabled()) return false;
+        if (!_isEnabled()) {
+            return false;
+        }
 
         // Build new query
         var newQuery = _getQueryString(short);
@@ -217,7 +225,9 @@ var mediaQueryResponse = (function () {
     // Clear a query, delete all labels, tokens, queries and subscriptions
     function clearQuery(label, safeMode) {
 
-        if (!_isEnabled()) return false;
+        if (!_isEnabled()) {
+            return false;
+        }
 
         safeMode = (_isDefined(safeMode)) ? safeMode : true;
 
@@ -309,6 +319,6 @@ var mediaQueryResponse = (function () {
         changeQuery: changeQuery,
         subscribe: subscribe,
         unsubscribe: unsubscribe
-    }
+    };
 })
 ();
