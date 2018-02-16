@@ -2,17 +2,19 @@
 
 mediaQueryResponse is a vanilla JS module that lets you register mediaQueries and subscribe to changes in them.
 
+
 ## Todo
 - [x] Improve RC5 to v1.0.0
 - [x] Release v1.0.0
 - [ ] get constructive criticism 
 - [ ] improve documentation
 
+
 ## Usage
 
 Reference a shorter alias with `var mqr = mediaQueryResponse;`
 
-#### Registering queries 
+### Registering queries 
 ```
 // Use with integers
 mediaQueryResponse.registerQuery("xl", 1440);
@@ -24,7 +26,7 @@ mediaQueryResponse.registerQuery("handheld", "(max-width: 800px)");
 mediaQueryResponse.registerQuery("landscape", "(orientation: landscape)");
 ```
 
-#### Subscribing to changes
+### Subscribing to changes
 Have some functions,
 ```
 function any(data) {
@@ -50,13 +52,13 @@ Note that "any" does not have to be registered first but fires on every possible
 var anyToken = mediaQueryResponse.subscribe("any", any);
 ```
 
-#### Unsubscribing
+### Unsubscribing
 Unsubscribe by giving the previously aquired tokens
 ```
 mediaQueryResponse.unsubscribe(largeTokens);
 ```
 
-#### Changing/deleting queries
+### Changing/deleting queries
 Change mediaQueries if you need.
 ```
 mediaQueryResponse.changeQuery("lg", 992);
@@ -67,7 +69,7 @@ Or completely clear them
 mediaQueryResponse.clearQuery("xl", false);
 ```
 
-#### Example of returned data  
+### Example of returned data  
 ```
 Object {
   label: "any",
