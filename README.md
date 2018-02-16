@@ -25,8 +25,8 @@ mediaQueryResponse.registerQuery("landscape", "(orientation: landscape)");
 ```
 
 #### Subscribing to changes
+Have some functions,
 ```
-// Have some functions
 function any(data) {
     console.log("any", data);
 }
@@ -39,28 +39,31 @@ function largeTwo (data) {
 function mediumAndExtralarge (data) {
     console.log("mediumAndExtralarge", data);
 }
-
-// Subscribe a (list of) function(s) to a (list of) query(s), returning tokens for handlers
+```
+then subscribe a (list of) function(s) to a (list of) query(s), returning tokens for handlers.
+```
 var largeTokens = mediaQueryResponse.subscribe("lg", [largeOne, largeTwo]);
 var mediumAndExtralargeTokens = mediaQueryResponse.subscribe(["md", "xl"], mediumAndExtralarge);
-
-// note that "any" does not have to be registered first but fires on every possible change
+```
+Note that "any" does not have to be registered first but fires on every possible change.
+```
 var anyToken = mediaQueryResponse.subscribe("any", any);
 ```
 
 #### Unsubscribing
+Unsubscribe by giving the previously aquired tokens
 ```
-// Unsubscribe by giving the previously aquired tokens
 mediaQueryResponse.unsubscribe(largeTokens);
 ```
 
 #### Changing/deleting queries
+Change mediaQueries if you need.
 ```
-// Change mediaQueries if you need
 mediaQueryResponse.changeQuery("lg", 992);
 mediaQueryResponse.changeQuery("xl", "(screen and (min-width: 992px))");
-
-// Or completely clear them
+```
+Or completely clear them
+```
 mediaQueryResponse.clearQuery("xl", false);
 ```
 
