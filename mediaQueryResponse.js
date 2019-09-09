@@ -2,7 +2,7 @@
  * mediaQueryResponse (MQR) v1.0.0
  *
  * A module that lets scripts register and subscribe to mediaQueries,
- * monitors and subsequently publishes to changes subscribers.
+ * monitors and subsequently publishes changes to subscribers.
  *
  *
  * == Subscribe/Publish Architecture
@@ -15,11 +15,28 @@
  * Depends on the Browsers matchMedia-API, will complain and not work but will not error if not found.
  *
  * @author: Sebastian Wolfertz (https://github.com/Enkrod)
- * @license: MIT
+ * @license: ISC
  */
 
 
-var mediaQueryResponse = (function () {
+"use strict";
+
+// Universal Module Definition
+(function (root, factory) {
+    if (typeof exports === 'object') {
+        // Node, CommonJS-like
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD
+        define([], factory);
+    } else {
+        // Browser globals (root is window)
+        root.mediaQueryResponse = factory();
+        root.mqr = factory();
+    }
+
+}(this, function () {
+
 
     //*********************
     //********************
@@ -79,6 +96,10 @@ var mediaQueryResponse = (function () {
 
     // Checks if mediaQueryResponse is enabled and complains if disabled
     function _isEnabled() {
+        if (typeof matchMedia === "undefined") {
+            console.warn("mediaQueryResponse: No matchMedia-API found - mediaQueryResponse won't work!");
+            return false;
+        }
         if (!matchMedia) {
             console.warn("mediaQueryResponse: No matchMedia-API found - mediaQueryResponse won't work!");
             return false;
@@ -159,14 +180,16 @@ var mediaQueryResponse = (function () {
         var query = _getQueryString(short);
 
         if (_isDefined(_labelByQuery[query])) {
-            console.warn("mediaQueryResponse: Query \"" + query + "\" already registered, instead of registering \"" + label + "\" use existing Query: \"" + _labelByQuery[query] + "\".");
+            console.warn("mediaQueryResponse: Query \"" + query + "\" already registered, instead of registering \"" + label + "\" use existing label: \"" + _labelByQuery[query] + "\".");
             return false;
         }
         if (_isDefined(_mediaQueries[label])) {
-            console.warn("mediaQueryResponse: Query \"" + label + "\" already registered.");
+            console.warn("mediaQueryResponse: Label \"" + label + "\" already registered with query \"" + _mediaQueries[label].query + "\".");
             return false;
         }
-
+        if (_config.debug) {
+            console.log("mediaQueryResponse: Registering \"" + label + "\" with query \"" + query + "\"");
+        }
         _mediaQueries[label] = {
             query: query,
             api: window.matchMedia(query),
@@ -176,6 +199,9 @@ var mediaQueryResponse = (function () {
                 _publish("any", label, event);
             }
         };
+        if (_config.debug) {
+            console.log(_mediaQueries[label]);
+        }
         _mediaQueries[label].api.addListener(_mediaQueries[label].call);
         _labelByQuery[query] = label;
 
@@ -259,6 +285,10 @@ var mediaQueryResponse = (function () {
 
     // Subscribe a (list of) function(s) to a (list of) query(s), returning tokens for handlers
     function subscribe(label, response, tokens) {
+        if (!_isEnabled()) {
+            return false;
+        }
+
         tokens = _isDefined(tokens) ? tokens : [];
         if (Array.isArray(label)) {
             for (var i = 0; i < label.length; i++) {
@@ -286,6 +316,10 @@ var mediaQueryResponse = (function () {
 
     // Unsubscribe a (list of) token(s)
     function unsubscribe(token) {
+        if (!_isEnabled()) {
+            return false;
+        }
+
         if (Array.isArray(token)) {
             for (var i = 0; i < token.length; i++) {
                 unsubscribe(token[i]);
@@ -299,6 +333,19 @@ var mediaQueryResponse = (function () {
                 return false;
             }
         }
+    }
+
+
+    function is(label) {
+        if (!_isEnabled()) {
+            return false;
+        }
+
+        if (!_mediaQueries.hasOwnProperty(label)) {
+            console.warn("mediaQueryResponse: Label \"" + label + "\" undefined, please register a query through: mediaQueryResponse.registerQuery(\"" + label + "\", 'SomeQuery').");
+            return void 0;
+        }
+        return _mediaQueries[label].api.matches;
     }
 
 
@@ -318,7 +365,7 @@ var mediaQueryResponse = (function () {
         clearQuery: clearQuery,
         changeQuery: changeQuery,
         subscribe: subscribe,
-        unsubscribe: unsubscribe
+        unsubscribe: unsubscribe,
+        is: is
     };
-})
-();
+}));
