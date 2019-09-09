@@ -1,7 +1,10 @@
 # mediaQueryResponse
 
-mediaQueryResponse is a vanilla JS module that lets you register mediaQueries and subscribe to changes in them.
-
+mediaQueryResponse (MQR) is a vanilla JS module that lets you: 
+1) register mediaQueries with human readable labels
+2) subscribe / unsubscribe functions to those labels to be called when a mediaQuery yields a different result
+3) Check if the query of any one label applies
+ 
 
 ## Todo
 - [x] Improve RC5 to v1.0.0
